@@ -1,0 +1,10 @@
+SearchBuilder Plugin
+=============================
+
+This plugin provides a flexible way to add conditional search to Rails.
+
+Example Usage
+-----------------------------
+
+Installation
+-----------------------------
