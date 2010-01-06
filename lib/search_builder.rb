@@ -41,6 +41,46 @@ module SearchBuilder
       end
     end
 
+    def searchable_less_than( *columns )
+      self.class_eval do
+        columns.each do |column|
+          define_method("#{column}_less_than_searchable_conditions") do
+            ["#{self.class.table_name}.#{column} < ?", self.send(column)] unless self.send(column).blank?
+          end
+        end
+      end
+    end
+
+    def searchable_less_and_equal_than( *columns )
+      self.class_eval do
+        columns.each do |column|
+          define_method("#{column}_less_and_equal_than_searchable_conditions") do
+            ["#{self.class.table_name}.#{column} <= ?", self.send(column)] unless self.send(column).blank?
+          end
+        end
+      end
+    end
+
+    def searchable_greater_than( *columns )
+      self.class_eval do
+        columns.each do |column|
+          define_method("#{column}_greater_than_searchable_conditions") do
+            ["#{self.class.table_name}.#{column} > ?", self.send(column)] unless self.send(column).blank?
+          end
+        end
+      end
+    end
+
+    def searchable_greater_and_equal_than( *columns )
+      self.class_eval do
+        columns.each do |column|
+          define_method("#{column}_greater_and_equal_than_searchable_conditions") do
+            ["#{self.class.table_name}.#{column} >= ?", self.send(column)] unless self.send(column).blank?
+          end
+        end
+      end
+    end
+
     def date_searchable_between( column, begin_column, end_column)
       self.class_eval do
         # create attr_accessor
@@ -61,6 +101,18 @@ module SearchBuilder
 
         define_method("#{column}_between_searchable_conditions") do
           ["#{self.class.table_name}.#{column} BETWEEN ? AND ?", self.send(begin_column).to_i, self.send(end_column).to_i] unless self.send(begin_column).blank? || self.send(end_column).blank?
+        end
+      end
+    end
+
+    def float_searchable_between( column, begin_column, end_column)
+      self.class_eval do
+        # create attr_accessor
+        attr_accessor begin_column
+        attr_accessor end_column
+
+        define_method("#{column}_between_searchable_conditions") do
+          ["#{self.class.table_name}.#{column} BETWEEN ? AND ?", self.send(begin_column).to_f, self.send(end_column).to_f] unless self.send(begin_column).blank? || self.send(end_column).blank?
         end
       end
     end
