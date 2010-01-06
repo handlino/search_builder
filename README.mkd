@@ -34,6 +34,7 @@ SearchBuilder 是參考http://railscasts.com/episodes/111-advanced-search-form �
 
 然後新增一個搜尋的instance method:
   
+
   def search_all
     Product.find(:all, :conditions => conditions)
   end
