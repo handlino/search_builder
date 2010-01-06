@@ -43,7 +43,7 @@ SearchBuilder 是參考http://railscasts.com/episodes/111-advanced-search-form �
 
   如此一來，就會在搜尋的時候增加如下的sql condition:
   
-    ["product.name like ?", name]
+    ["product.name LIKE ?", name]
 
   除了searchable_like, 你還可以用
     
@@ -64,7 +64,7 @@ SearchBuilder 是參考http://railscasts.com/episodes/111-advanced-search-form �
 
   如此一來，就會在搜尋的時候增加如下的sql condition:
   
-    ["product.created_at between ? and ?", begin_of_created_at, end_of_created_at]
+    ["product.created_at BETWEEN ? AND ?", begin_of_created_at, end_of_created_at]
 
   第一個參數是column名稱，第二個與第三個參數，則是你希望搜尋的起始日期與結束日期。
   between的搜尋，你還可以使用float_searchable_between, integer_searchable_between, 主要的差別就是欄位的資料型態。
