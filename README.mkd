@@ -15,45 +15,54 @@ SearchBuilder 是參考http://railscasts.com/episodes/111-advanced-search-form �
 
 ### Model
 
-假設你有一個model如下：
+  假設你有一個model如下：
 
-  class Product << ActiveRecord::Base
+    class Product << ActiveRecord::Base 
+    end
+
+  在products table中有下列欄位：
+
+    name :String(255)
+    price :Float
+    order_number :Integer
+    created_at :DateTime
+
+  首先，你需要在model中mixin SearchBuilder module:
+
+    include SearchBuilder
+
+  然後新增一個搜尋的instance method:
+  
+    def search_all
+      Product.find(:all, :conditions => conditions)
+    end
+
+  如果你要針對欄位，作sql like的搜尋你只需要在model中，你可以：
+
+    searchable_like :name
+
+  如此一來，就會在搜尋的時候增加如下的sql condition:
+  
+    ["product.name link ?", name]
+
+  除了searchable_like, 你還可以用
     
-  end
+    searchable_equal, 
+    searchable_less_than, 
+    searchable_less_and_equal_than, 
+    searchable_greater_than, 
+    searchable_greater_and_equal_than
 
-在products table中有下列欄位：
+  例如
 
-  name :String(255)
-  price :Float
-  order_number :Integer
-  created_at :DateTime
+    searchable_greater_than :price, created_at
 
-首先，你需要在model中mixin SearchBuilder module:
+  如果你需要針對欄位，進行between的搜尋，你可以：
 
-  include SearchBuilder
+    date_searchable_between :created_at, :begin_of_created_at, :end_of_created_at
 
-然後新增一個搜尋的instance method:
-  
-
-  def search_all
-    Product.find(:all, :conditions => conditions)
-  end
-
-如果你要針對欄位，作sql like的搜尋你只需要在model中，你可以：
-
-  searchable_like :name
-
-如此一來，就會在搜尋的時候增加如下的sql condition:
-  
-  ["product.name link ?", name]
-
-除了searchable_like, 你還可以用searchable_equal, searchable_less_than, searchable_less_and_equal_than, searchable_greater_than, searchable_greater_and_equal_than。
-
-如果你需要針對欄位，進行between的搜尋，你可以：
-
-  date_searchable_between :created_at, :begin_of_created_at, :end_of_created_at
-
-第一個參數是column名稱，第二個與第三個參數，則是你希望搜尋的起始日期與結束日期。
+  第一個參數是column名稱，第二個與第三個參數，則是你希望搜尋的起始日期與結束日期。
+  between的搜尋，你還可以使用float_searchable_between, integer_searchable_between, 主要的差別就是欄位的資料型態。
 
 
 ### Controller
