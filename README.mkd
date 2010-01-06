@@ -56,6 +56,7 @@ SearchBuilder 是參考http://railscasts.com/episodes/111-advanced-search-form �
   例如
 
     searchable_greater_than :price, created_at
+    searchable_less_than :order_number
 
   如果你需要針對欄位，進行between的搜尋，你可以：
 
