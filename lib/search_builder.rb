@@ -3,20 +3,20 @@ module SearchBuilder
     base.extend(ClassMethods)
   end
 
+  #def conditions
+  #  [conditions_clauses.join(' AND '), *conditions_options]
+  #end
+
+  #def conditions_clauses
+  #  conditions_parts.map { |condition| condition.first }
+  #end
+
+  #def conditions_options
+  #  conditions_parts.map { |condition| condition[1..-1] }.flatten
+  #end
+
   def conditions
-    [conditions_clauses.join(' AND '), *conditions_options]
-  end
-
-  def conditions_clauses
-    conditions_parts.map { |condition| condition.first }
-  end
-
-  def conditions_options
-    conditions_parts.map { |condition| condition[1..-1] }.flatten
-  end
-
-  def conditions_parts
-    methods.grep(/_searchable_conditions$/).map { |m| send(m) }.compact
+    methods.grep(/_searchable_conditions$/).map { |m| self.class.merge_conditions(send(m)) }.compact.join(" AND ")
   end
 
 
